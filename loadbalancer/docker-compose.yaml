@@ -1,0 +1,34 @@
+version: "3.8"
+services:
+    server1:
+        image: serverapp:latest
+        networks:
+            - servers
+    server2:
+        image: serverapp:latest
+        networks:
+            - servers
+    server3:
+        image: serverapp:latest
+        networks:
+            - servers
+    loadbalancer:
+        image: nginx-lb:latest
+        ports: 
+            - 3000:80
+        deploy:
+            replicas: 1
+            labels: [APP=BALANCER]
+            restart_policy:
+                condition: on-failure
+        depends_on:
+            - server1
+            - server2
+            - server3
+        networks:
+            - servers
+networks:
+    servers:
+
+volumes:
+    shared:
