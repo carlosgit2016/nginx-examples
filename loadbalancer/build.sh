@@ -8,19 +8,28 @@ function build_serverapp() {
 
 function build_nginx() {
     pushd nginx-image || exit 1
-    docker build -t "nginx-lb:$1" .
+    local tag
+    docker build -t "nginx-lb:$tag" .
     popd || exit 1
 }
 
 function main(){
     while [[ "$1" =~ ^-- ]]; do case $1 in
         --tag )
-            shift; tag="$1"
+            shift; tag="$1";
             ;;
         --app )
             shift; app="$1"
             ;;
     esac; shift; done
+
+    if [ -z "$tag" ]; then
+        tag="latest"
+    fi
+
+    if [ -z "$app" ]; then
+        echo "App required" && exit 1
+    fi
 
     local image="$app:$tag"
 

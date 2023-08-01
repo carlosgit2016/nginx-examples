@@ -13,14 +13,14 @@ services:
         networks:
             - servers
     loadbalancer:
-        image: nginx-lb:latest
+        build:
+            context: nginx-image
         ports: 
             - 3000:80
+        restart: always
         deploy:
             replicas: 1
             labels: [APP=BALANCER]
-            restart_policy:
-                condition: on-failure
         depends_on:
             - server1
             - server2
