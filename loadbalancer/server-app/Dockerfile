@@ -5,9 +5,9 @@ COPY . .
 
 RUN go build main.go
 
-FROM alpine:latest
+FROM debian:latest
 
-WORKDIR app
+WORKDIR /app
 COPY --from=build /app/main main
 
 ENTRYPOINT ["/bin/sh", "-c", "/app/main"]

@@ -1,5 +1,13 @@
 #!/bin/bash
 
+function help() {
+    echo '''
+        Usage:
+            --app <app> (serverapp|nginx)
+            --tag <tag> (Default to latest)
+    '''
+}
+
 function build_serverapp() {
     pushd server-app || exit 1
     docker build -t "serverapp:$1" .
@@ -28,7 +36,7 @@ function main(){
     fi
 
     if [ -z "$app" ]; then
-        echo "App required" && exit 1
+        help && exit 1
     fi
 
     local image="$app:$tag"
