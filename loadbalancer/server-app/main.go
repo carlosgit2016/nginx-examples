@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+    "fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,6 +12,7 @@ import (
 type serverinfo struct {
 	IP             string `json:"ip"`
 	CONTAINER_NAME string `json:"container_name"`
+    LB_TYPE        string `json:"lb_type"`
 }
 
 func getServerInfo(c *gin.Context) {
@@ -37,7 +39,9 @@ func getServerInfo(c *gin.Context) {
 	si := serverinfo{
 		IP:             ip,
 		CONTAINER_NAME: os.Getenv("HOSTNAME"),
+        LB_TYPE: os.Getenv("LB_TYPE"),
 	}
+    log.Print("Response \n %+v", si)
 	c.IndentedJSON(http.StatusOK, si)
 }
 
@@ -45,6 +49,11 @@ func main() {
 	router := gin.Default()
 	router.GET("/", getServerInfo)
 
-	// listen on 0.0.0.0:3000
-	router.Run(":3000")
+    var port string
+
+    if port = os.Getenv("PORT"); port == "" {
+        port = "3000"
+    }
+    log.Printf("Current port wil be set as %s", port)
+	router.Run(fmt.Sprintf(":%s", port))
 }

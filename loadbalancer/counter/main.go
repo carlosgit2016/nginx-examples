@@ -6,12 +6,17 @@ import (
     "io"
     "bufio"
     "strings"
+    "flag"
 )
 
 var ippercentage map[string]int
 
 func main(){
-    lf, err := os.OpenFile("log", os.O_RDONLY, 0666)
+    var inFile string
+    flag.StringVar(&inFile, "file", "", "The name of the file to calc the logs")
+    flag.Parse()
+
+    lf, err := os.OpenFile(inFile, os.O_RDONLY, 0666)
     if err != nil {
         panic(err)
     }
@@ -32,7 +37,7 @@ func main(){
         }
 
         lineCount += 1
-         lns := strings.TrimSpace(line)
+        lns := strings.TrimSpace(line)
         if (lns == "") {
             continue
         }

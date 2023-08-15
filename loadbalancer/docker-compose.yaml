@@ -6,14 +6,41 @@ services:
             - servers
         ports:
             - 3001:3000
+        environment:
+            LB_TYPE: roundrobin
     server2:
         image: serverapp:latest
         networks:
             - servers
+        environment:
+            LB_TYPE: roundrobin
     server3:
         image: serverapp:latest
         networks:
             - servers
+        environment:
+            LB_TYPE: roundrobin
+    server4:
+        image: serverapp:latest
+        networks:
+            - leastconn
+        environment:
+            LB_TYPE: leastconn
+            PORT: 80
+    server5:
+        image: serverapp:latest
+        networks:
+            - leastconn
+        environment:
+            LB_TYPE: leastconn
+            PORT: 80
+    server6:
+        image: serverapp:latest
+        networks:
+            - leastconn
+        environment:
+            LB_TYPE: leastconn
+            PORT: 80
     loadbalancer:
         build:
             context: nginx-image
@@ -27,10 +54,15 @@ services:
             - server1
             - server2
             - server3
+            - server4
+            - server5
+            - server6
         networks:
             - servers
+            - leastconn
 networks:
     servers:
+    leastconn:
 
 volumes:
     shared:
