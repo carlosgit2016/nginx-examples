@@ -18,7 +18,7 @@ docker compose up --build -d # Up containers
 
 This script will send a request to localhost in the port `3000` following the defined interval in seconds
 
-#### Watch the balancer work
+#### Watch the load balancer work
 
 ```bash
 cd counter
@@ -57,4 +57,12 @@ watch -n1 go run main.go
 192.168.16.4 - 33 % | count: 323
 192.168.16.2 - 33 % | count: 326
 ```
+
+### Passive health check
+
+The server1 is configured to attempt 3 times within 15 seconds before consider the service unavailable. `fail_timeout=15s max_fails=3;`
+
+Also after 15 seconds the server is make available again.
+
+![image](2023-08-17_01-31.png)
 

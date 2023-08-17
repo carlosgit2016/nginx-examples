@@ -10,7 +10,7 @@ function main() {
     local log_file
     log_file="$SVC.log"
     if [ -f "$log_file" ]; then
-        rm $log_file
+        rm "$log_file"
     fi
     while true; do
         response=$(curl -s -H "Host: serverapp.com" "localhost:3000/$SVC")
